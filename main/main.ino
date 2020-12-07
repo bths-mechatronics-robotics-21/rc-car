@@ -31,3 +31,11 @@ void setup()
 void loop()
 {
 }
+
+void parse_usr_input(struct usr_val *in)
+{
+	Serial.print("\nInput a turning angle: ");
+	while (!Serial.available());
+	in->rot_ang = Serial.parseInt();
+	Serial.println(in->rot_ang);
+}
