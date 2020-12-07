@@ -17,6 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+struct usr_val {
+	int rot_ang;    // rotation angle + direction
+	int16_t speed;  // user defined speed
+} usr_val;
+
 void setup()
 {
 	Serial.flush();
