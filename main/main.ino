@@ -18,8 +18,8 @@
  */
 
 struct usr_val {
-	int rot_ang;    // rotation angle + direction
-	int16_t speed;  // user defined speed
+	uint8_t rot_ang;  // rotation angle + direction
+	int16_t speed;    // user defined speed
 } usr_val;
 
 void setup()
