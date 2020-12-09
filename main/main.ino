@@ -34,8 +34,20 @@ void loop()
 
 void parse_usr_input(struct usr_val *in)
 {
-	Serial.print("\nInput a turning angle: ");
+	Serial.print("\nturning angle (0-90): ");
 	while (!Serial.available());
 	in->rot_ang = Serial.parseInt();
 	Serial.println(in->rot_ang);
+
+	Serial.print("left or right (0/1): ");
+	while (!Serial.available());
+	int buff = Serial.parseInt();
+	Serial.println(buff);
+	in->rot_ang |= _BV(buff ? 8 : 0);  // set direction bit
+	Serial.println(in->rot_ang);
+
+	Serial.print("speed (+-255): ");
+	while (!Serial.available());
+	in->speed = Serial.parseInt();
+	Serial.print(in->speed);
 }
