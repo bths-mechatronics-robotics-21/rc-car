@@ -22,10 +22,24 @@ struct usr_val {
 	int16_t speed;    // user defined speed
 } usr_val;
 
+struct motor_st {
+  uint8_t l[2] = {4, 5};  // left motor
+  uint8_t r[2] = {7, 6};  // right motor
+  float diamtr_in = 0.925;  // wheel diameter
+  float width_in  = 5.191;  // chassis tire width
+  float rpm = 100; // arbitrary RPM, TODO (change to match max)
+} motor;
+
 void setup()
 {
-	Serial.flush();
-	Serial.begin(9600);
+  for (int i = 0; i < 2; i++) {
+    pinMode(motor.l[i], OUTPUT);
+    pinMode(motor.r[i], OUTPUT);
+  }
+	
+  motor_drive(&motor, 128, 90 | _BV(8));
+  Serial.flush();
+  Serial.begin(9600);
 }
 
 void loop()
@@ -55,4 +69,26 @@ void parse_usr_input(struct usr_val *in)
 	Serial.println(in->speed);
 	if (255 >= in->speed && -255 <= in->speed) break;
 	}
+}
+
+int angle_to_delay(struct motor_st *m, double rot_angle)
+/* 
+ * Delay as a function of RPM and angle. 
+ */
+{
+  double millisPerRotation = (60 / m->rpm) * 1000;
+  int anglePercentage = map(0, 360, 0, 1, rot_angle);
+  return millisPerRotation * anglePercentage;
+}
+
+void motor_drive(struct motor_st *m, int16_t speed, uint8_t ctrl)
+/*
+ * uint8_t ctrl -- takes a value for the rotation angle from 0 to 90,
+ * while bit 8 controls direction:
+ *  0 - left
+ *  1 - right
+ */
+{
+  double rot_ang = ((ctrl & ~_BV(8)) * PI / 2) - (double)90;
+  int delayVal = angle_to_delay(m, rot_ang);
 }
