@@ -91,4 +91,26 @@ void motor_drive(struct motor_st *m, int16_t speed, uint8_t ctrl)
 {
   double rot_ang = ((ctrl & ~_BV(8)) * PI / 2) - (double)90;
   int delayVal = angle_to_delay(m, rot_ang);
+
+  if (rot_ang == 0){
+    if(speed > 0){
+      // CW:
+      digitalWrite(m->r[1], LOW);
+      analogWrite(m->r[0], speed);
+     
+      digitalWrite(m->l[1], LOW);
+      analogWrite(m->l[0], speed);
+    } else {
+      // CCW:
+      digitalWrite(m->r[0], LOW);
+      analogWrite(m->r[1], speed);
+     
+      digitalWrite(m->l[0], LOW);
+      analogWrite(m->l[1], speed); 
+    }
+  }
+  /* 
+   * If angle > 0: turn accordingly based on direction. 
+   * TODO: Jacob
+   */
 }
