@@ -24,7 +24,7 @@ struct usr_val {
 
 struct motor_st {
   uint8_t l[2] = {4, 5};  // left motor
-  uint8_t r[2] = {7, 6};  // right motor
+  uint8_t r[2] = {6, 7};  // right motor
   float diamtr_in = 0.925;  // wheel diameter
   float width_in  = 5.191;  // chassis tire width
   float rpm = 100; // arbitrary RPM, TODO (change to match max)
