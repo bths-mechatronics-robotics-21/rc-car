@@ -36,7 +36,6 @@ void setup()
 		pinMode(motor.r[i], OUTPUT);
 	}
 
-	motor_drive(&motor, 128, 90 | _BV(8));
 	Serial.flush();
 	Serial.begin(9600);
 }
