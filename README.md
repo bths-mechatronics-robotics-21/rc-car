@@ -15,6 +15,8 @@ future expansion for implementing more robust forms of communication
 (preferably wireless).
 
 
+## Circuit
+
 <div align="center">
 <img src="https://media.githubusercontent.com/media/bths-mechatronics-robotics-21/rc-car/eddee2bcd4feb0f76264827e6de7109a19fcaf08/schematic/fritzing.svg">
 <hr>
