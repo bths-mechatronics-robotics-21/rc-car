@@ -19,8 +19,8 @@
  */
 
 struct usr_val {
-	int8_t rot_ang;   // rotation angle + direction
-	int16_t speed;    // user defined speed
+	int8_t rot_ang;  // rotation angle + direction
+	int16_t speed;   // user defined speed
 } usr_val;
 
 struct motor_st {
