@@ -42,6 +42,8 @@ void setup()
 
 void loop()
 {
+	parse_usr_input(&usr_val);
+	motor_drive(&motor, &usr_val);
 }
 
 void parse_usr_input(struct usr_val *in)
