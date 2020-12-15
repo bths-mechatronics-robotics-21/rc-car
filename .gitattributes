@@ -4,3 +4,4 @@
 *.dwg filter=lfs diff=lfs merge=lfs -text
 *.ipn filter=lfs diff=lfs merge=lfs -text
 *.iam filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
