@@ -63,46 +63,36 @@ void parse_usr_input(struct usr_val *in)
 	}
 }
 
-int angle_to_delay(struct motor_st *m, double rot_angle)
-/*
- * Delay as a function of RPM and angle.
- */
+void motor_drive(struct motor_st *m, struct usr_val *u)
 {
-	double millisPerRotation = (60 / m->rpm) * 1000;
-	int anglePercentage = map(0, 360, 0, 1, rot_angle);
-	return millisPerRotation * anglePercentage;
-}
+	// get 8-bit values so it's nice to work with
+	uint8_t master = abs(u->speed);
+	uint8_t slave  = map(abs(u->rot_ang), 0, 90, master, 0);
 
-void motor_drive(struct motor_st *m, int16_t speed, uint8_t ctrl)
-/*
- * uint8_t ctrl -- takes a value for the rotation angle from 0 to 90,
- * while bit 8 controls direction:
- *  0 - left
- *  1 - right
- */
-{
-	double rot_ang = ((ctrl & ~_BV(8)) * PI / 2) - (double)90;
-	int delayVal = angle_to_delay(m, rot_ang);
-
-	if (rot_ang == 0){
-		if(speed > 0){
-			// CW:
-			digitalWrite(m->r[1], LOW);
-			analogWrite(m->r[0], speed);
-
-			digitalWrite(m->l[1], LOW);
-			analogWrite(m->l[0], speed);
-		} else {
-			// CCW:
-			digitalWrite(m->r[0], LOW);
-			analogWrite(m->r[1], speed);
-
-			digitalWrite(m->l[0], LOW);
-			analogWrite(m->l[1], speed);
-		}
+	// decide which motor is master/slave
+	uint8_t l_speed, r_speed;
+	if (u->rot_ang < 0) {
+		l_speed = master;
+		r_speed = slave;
+	} else {
+		l_speed = slave;
+		r_speed = master;
 	}
-/*
- * If angle > 0: turn accordingly based on direction.
- * TODO: Jacob
- */
+
+	/*
+	 * Since one of the motors is inverted to simplify wiring, bit-fliping
+	 * the appropriate uint8_t will give us the correct complementary pwm
+	 * value.
+	 */
+	if (u->speed > 0) {
+		analogWrite(m->l[1], ~l_speed);
+		analogWrite(m->r[1], r_speed);
+		digitalWrite(m->l[0], 1);
+		digitalWrite(m->r[0], 0);
+	} else {
+		analogWrite(m->l[1], l_speed);
+		analogWrite(m->r[1], ~r_speed);
+		digitalWrite(m->l[0], 0);
+		digitalWrite(m->r[0], 1);
+	}
 }
