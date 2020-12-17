@@ -21,6 +21,7 @@
 struct usr_val {
 	int8_t rot_ang;  // rotation angle + direction
 	int16_t speed;   // user defined speed
+	bool brake;      // brake or coast?
 } usr_val;
 
 struct motor_st {
@@ -63,10 +64,34 @@ void parse_usr_input(struct usr_val *in)
 		Serial.println(in->speed);
 		if (255 >= in->speed && -255 <= in->speed) break;
 	}
+
+	if (in->speed) return;  // if non-zero speed, exit
+
+	Serial.print("brake/coast (!0/0): ");
+	while (!Serial.available());
+	in->brake = Serial.parseInt() ? true : false;
+	Serial.println(in->brake);
 }
 
 void motor_drive(struct motor_st *m, struct usr_val *u)
 {
+	// braking/coasting
+	if (!u->speed) {
+		if (u->speed) {
+			digitalWrite(m->l[0], 1);
+			digitalWrite(m->r[0], 1);
+			digitalWrite(m->l[1], 1);
+			digitalWrite(m->r[1], 1);
+		} else {
+			digitalWrite(m->l[0], 0);
+			digitalWrite(m->r[0], 0);
+			digitalWrite(m->l[1], 0);
+			digitalWrite(m->r[1], 0);
+		}
+
+		return;  // exit if just braking/coasting
+	}
+
 	// get 8-bit values so it's nice to work with
 	uint8_t master = abs(u->speed);
 	uint8_t slave  = map(abs(u->rot_ang), 0, 90, master, 0);
