@@ -82,7 +82,7 @@ void motor_drive(struct motor_st *m, struct usr_val *u)
 	}
 
 	/*
-	 * Since one of the motors is inverted to simplify wiring, bit-fliping
+	 * Since one of the motors is inverted to simplify wiring, bit-flipping
 	 * the appropriate uint8_t will give us the correct complementary pwm
 	 * value.
 	 */
