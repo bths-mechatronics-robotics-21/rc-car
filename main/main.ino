@@ -77,7 +77,7 @@ void motor_drive(struct motor_st *m, struct usr_val *u)
 {
 	// braking/coasting
 	if (!u->speed) {
-		if (u->speed) {
+		if (u->brake) {
 			digitalWrite(m->l[0], 1);
 			digitalWrite(m->r[0], 1);
 			digitalWrite(m->l[1], 1);
