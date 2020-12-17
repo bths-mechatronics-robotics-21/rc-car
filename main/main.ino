@@ -113,11 +113,11 @@ void motor_drive(struct motor_st *m, struct usr_val *u)
 	 */
 	if (u->speed > 0) {
 		analogWrite(m->l[1], ~l_speed);
-		analogWrite(m->r[1], r_speed);
+		analogWrite(m->r[1],  r_speed);
 		digitalWrite(m->l[0], 1);
 		digitalWrite(m->r[0], 0);
 	} else {
-		analogWrite(m->l[1], l_speed);
+		analogWrite(m->l[1],  l_speed);
 		analogWrite(m->r[1], ~r_speed);
 		digitalWrite(m->l[0], 0);
 		digitalWrite(m->r[0], 1);
